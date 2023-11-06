@@ -174,6 +174,16 @@ RUN pip3 install opencv-python opencv-contrib-python
 ###### START HERE -- Install whatever dependencies you need specific to this project!
 ####################################################################################
 
+# realsense: https://dev.intelrealsense.com/docs/compiling-librealsense-for-linux-ubuntu-guide
+RUN apt-get update && apt-get upgrade && apt-get dist-upgrade
+RUN apt-get install -y libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev
+RUN apt-get install -y git wget cmake build-essential
+RUN apt-get install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at
+RUN cd /home/$USERNAME && git clone https://github.com/IntelRealSense/librealsense.git && cd librealsense && ./scripts/setup_udev_rules.sh && ./scripts/patch-realsense-ubuntu-lts.sh
+RUN mkdir build && cd build
+RUN cmake ../ -DCMAKE_BUILD_TYPE=Release
+RUN make uninstall && make clean && make && make install
+
 
 #COPY ./rsc/IsaacGym_Preview_2_Package.tar.gz /home/$USERNAME/
 #RUN cd /home/$USERNAME && tar -xvzf IsaacGym_Preview_2_Package.tar.gz
